@@ -67,14 +67,23 @@ makeCacheMatrix <- function(x = matrix()) {
 ## avoiding to recalculate it again.
 cacheSolve <- function(x, ...) {
     
+    # get the inverse matrix from x with getinverse(). 
+    # If this is NULL, that 
+    # means that it was never computed before
     i <- x$getinverse()
     if(!is.null(i)) {
+        # not NULL : already computed. Reuse the value, don't compute it again
         message("getting cached data")
         return(i)
     }
+    
+    # NULL : we have to compute the inverse
     data <- x$get()
-
     i <- solve(data, ...)
+    
+    # the computed inverse is cached, i.e. stored in the "matrix" object using  setinverse
     x$setinverse(i)
+    
+    # the inverse is returned
     i
 }
